@@ -1,0 +1,32 @@
+# Run from this folder: docker compose --env-file ../.env up --build
+name: sentinel-x
+services:
+  db:  # provisioned now; the API switches from SQLite to this in Phase 1
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: sentinel
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: sentinel
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sentinel"]
+      interval: 5s
+      retries: 10
+  redis:
+    image: redis:7-alpine
+    profiles: [redis]
+  api:
+    build: { context: .., dockerfile: apps/api/Dockerfile }
+    env_file: ../.env
+    volumes: [apidata:/data]
+    ports: ["8000:8000"]
+    depends_on: { db: { condition: service_healthy } }
+  proxy:  # HTTPS for the hosted demo: docker compose --profile https up
+    image: caddy:2-alpine
+    profiles: [https]
+    ports: ["80:80", "443:443"]
+    volumes: ["./reverse-proxy/Caddyfile:/etc/caddy/Caddyfile:ro"]
+    depends_on: [api]
+volumes:
+  pgdata: {}
+  apidata: {}

@@ -1,0 +1,4 @@
+:root { --ink:#101828; --slate:#475467; --paper:#f1f4f8; --panel:#fff; --line:#dde3ea;
+  --blue:#2447f0; --up:#12805c; --warn:#b7791f; --down:#c8321f;
+  --sans:'IBM Plex Sans',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace; }
+body { margin:0; background:var(--paper); color:var(--ink); font:15px/1.5 var(--sans); }

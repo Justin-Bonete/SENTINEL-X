@@ -1,0 +1,1 @@
+-- Phase 4 (audit): security_events (hash chain), alerts, risk_assessments, admin_actions, monitored_systems.

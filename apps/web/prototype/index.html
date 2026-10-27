@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SENTINEL X</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#101828;--slate:#475467;--paper:#f1f4f8;--panel:#fff;--line:#dde3ea;--blue:#2447f0;--up:#12805c;--warn:#b7791f;--down:#c8321f;
+--sans:'IBM Plex Sans',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace}
+*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 var(--sans)}
+button,input,select{font:inherit;color:inherit}:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+aside{background:var(--ink);color:#c9d3e3;padding:24px 16px;display:flex;flex-direction:column;gap:4px}
+.brand{color:#fff;font-weight:600;font-size:18px;letter-spacing:.04em;padding:0 10px 20px}.brand b{color:#7d97ff}
+aside button{all:unset;cursor:pointer;padding:9px 10px;border-radius:6px}aside button:hover{background:#1d2a44}
+aside button[aria-current=true]{background:#24365c;color:#fff}aside .foot{margin-top:auto;font-size:12px;padding:10px;color:#8c9ab3}
+main{padding:28px 36px;max-width:1100px;width:100%}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:20px}
+h1{font-size:24px;margin:0 0 4px;font-weight:600}.sub{color:var(--slate);margin:0}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:6px;padding:9px 16px;cursor:pointer;font-weight:500}
+.btn:hover{background:#1c39c9}.ghost{background:none;border:1px solid var(--line);color:var(--ink)}.ghost:hover{background:#e8edf4}
+.danger{color:var(--down)}
+.stats{display:flex;flex-wrap:wrap;gap:28px;padding:14px 0 18px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.stats div{display:flex;flex-direction:column}.stats strong{font-size:22px;font-variant-numeric:tabular-nums}.stats span{color:var(--slate);font-size:13px}
+.row{display:grid;grid-template-columns:minmax(180px,1.3fr) minmax(200px,2fr) 90px 80px auto;gap:16px;align-items:center;
+background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:6px;padding:12px 16px;margin-top:8px}
+.row.up{border-left-color:var(--up)}.row.degraded{border-left-color:var(--warn)}.row.down{border-left-color:var(--down)}
+.name{font-weight:600;display:flex;align-items:center;gap:8px}.url{font:12px var(--mono);color:var(--slate);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag{font-size:12px;font-weight:500;padding:1px 8px;border-radius:99px;background:#e8edf4;color:var(--slate)}
+.up .st{color:var(--up)}.degraded .st{color:var(--warn)}.down .st{color:var(--down)}.st{font-size:13px;font-weight:500}
+.ribbon{display:flex;align-items:flex-end;gap:2px;height:34px}.ribbon i{flex:1;min-width:3px;background:var(--up);border-radius:1px;opacity:.85}
+.ribbon i.bad{background:var(--down);opacity:1}.ribbon.empty{color:var(--slate);font-size:13px;align-items:center}
+.num{font:500 14px var(--mono);text-align:right}.num small{display:block;font:400 11px var(--sans);color:var(--slate)}
+.acts{display:flex;gap:6px}.acts button{padding:5px 10px;font-size:13px}
+.empty{background:var(--panel);border:1px dashed #b9c4d3;border-radius:8px;padding:48px 24px;text-align:center;margin-top:12px}
+.empty h2{margin:0 0 6px;font-size:18px}.empty p{margin:0 0 16px;color:var(--slate)}
+table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:6px;font-size:13.5px}
+th{text-align:left;font-weight:600;color:var(--slate);padding:10px 12px;border-bottom:1px solid var(--line)}
+td{padding:10px 12px;border-bottom:1px solid #edf0f5;vertical-align:top}.mono{font-family:var(--mono);font-size:12px;color:var(--slate)}
+.risk{font-weight:500}.risk.High{color:var(--down)}.risk.Elevated{color:var(--warn)}.risk.Low{color:var(--up)}
+.chain{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500}.chain.ok{color:var(--up)}.chain.bad{color:var(--down)}
+dialog{border:0;border-radius:10px;padding:24px;width:min(440px,92vw);box-shadow:0 20px 60px rgba(16,24,40,.3)}
+dialog::backdrop{background:rgba(16,24,40,.5)}dialog h2{margin:0 0 4px;font-size:19px}
+label{display:block;font-size:13px;font-weight:500;margin-top:14px}
+input,select{width:100%;margin-top:4px;padding:8px 10px;border:1px solid #b9c4d3;border-radius:6px;background:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.hint{font-size:12px;color:var(--slate);margin:6px 0 0}
+.err{color:var(--down);font-size:13px;min-height:20px;margin-top:10px}.end{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
+#gate{position:fixed;inset:0;background:var(--ink);display:grid;place-items:center;z-index:9}
+#gate form{background:#fff;border-radius:10px;padding:28px;width:min(400px,92vw)}#gate h1{font-size:22px}
+@media(max-width:860px){.app{grid-template-columns:1fr}aside{flex-direction:row;align-items:center;padding:10px}.brand{padding:0 12px 0 0}aside .foot{display:none}
+main{padding:20px 16px}.row{grid-template-columns:1fr 1fr}.ribbon{grid-column:1/-1}}
+@media(prefers-reduced-motion:no-preference){.row{transition:border-color .3s}}
+</style>
+</head>
+<body>
+<div id="gate"><form id="gateForm">
+  <h1>Sign in to SENTINEL X</h1>
+  <p class="sub">Enter the admin token printed in the API console. Passkey sign-in replaces this in the next phase.</p>
+  <label>Admin token<input id="tok" type="password" autocomplete="off" required></label>
+  <div class="err" id="gateErr"></div>
+  <div class="end"><button class="btn">Sign in</button></div>
+</form></div>
+
+<div class="app">
+  <aside>
+    <div class="brand">SENTINEL <b>X</b></div>
+    <button data-view="systems" aria-current="true">Systems</button>
+    <button data-view="audit">Audit log</button>
+    <div class="foot"><span id="clock"></span><br><button id="out" style="padding:6px 0">Sign out</button></div>
+  </aside>
+  <main>
+    <section id="v-systems">
+      <header>
+        <div><h1>Monitored systems</h1><p class="sub">Every website, API, and internal system you register is checked automatically.</p></div>
+        <button class="btn" id="add">Register system</button>
+      </header>
+      <div class="stats" id="stats"></div>
+      <div id="list"></div>
+    </section>
+    <section id="v-audit" hidden>
+      <header>
+        <div><h1>Audit log</h1><p class="sub">Each event is hashed together with the one before it, so edits are detectable.</p></div>
+        <span class="chain" id="chain"></span>
+      </header>
+      <div style="overflow-x:auto"><table><thead><tr><th>Time (UTC)</th><th>Event</th><th>Detail</th><th>Risk</th><th>Reason</th><th>Correlation / hash</th></tr></thead><tbody id="ev"></tbody></table></div>
+    </section>
+  </main>
+</div>
+
+<dialog id="dlg"><form id="form">
+  <h2>Register a system</h2>
+  <p class="sub">Only add systems you own or are authorized to monitor.</p>
+  <label>Name<input name="name" maxlength="80" required placeholder="Company website"></label>
+  <label>URL to check<input name="url" type="url" required placeholder="https://example.com/health"></label>
+  <div class="two">
+    <label>Type<select name="kind"><option value="website">Website</option><option value="api">API</option><option value="system">Internal system</option></select></label>
+    <label>Check every<select name="interval_s"><option value="30">30 seconds</option><option value="60" selected>1 minute</option><option value="300">5 minutes</option><option value="900">15 minutes</option></select></label>
+  </div>
+  <label>Expected HTTP status (optional)<input name="expect_status" type="number" min="100" max="599" placeholder="Any status below 400"></label>
+  <p class="hint">Redirects are not followed. Private-network URLs need SENTINEL_ALLOW_PRIVATE=1 on the server.</p>
+  <div class="err" id="formErr"></div>
+  <div class="end"><button type="button" class="btn ghost" id="cancel">Cancel</button><button class="btn">Register system</button></div>
+</form></dialog>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let token=sessionStorage.getItem('sx_token')||'',timer=null;
+const LABEL={up:'Operational',degraded:'Slow',down:'Down',pending:'Checking…'};
+
+async function api(path,opt={}){
+  const r=await fetch('/api/v1'+path,{...opt,headers:{'Content-Type':'application/json','X-Admin-Token':token}});
+  if(r.status===401){lock();throw new Error('Sign in required')}
+  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(typeof e.detail==='string'?e.detail:'Check the values and try again')}
+  return r.status===204?null:r.json();
+}
+function lock(){clearInterval(timer);token='';sessionStorage.removeItem('sx_token');$('#gate').hidden=false}
+function ribbon(h){
+  if(!h.length)return '<div class="ribbon empty">Waiting for first check…</div>';
+  const max=Math.max(1,...h.map(x=>x[0]||0));
+  return '<div class="ribbon" role="img" aria-label="Last '+h.length+' checks">'+h.map(([ms,ok])=>
+    `<i class="${ok?'':'bad'}" style="height:${Math.max(14,(ms||0)/max*100)}%" title="${ms} ms"></i>`).join('')+'</div>';
+}
+function renderSystems(list){
+  const c=k=>list.filter(s=>s.state===k).length;
+  const ups=list.filter(s=>s.uptime!=null);
+  const avg=ups.length?(ups.reduce((a,s)=>a+s.uptime,0)/ups.length).toFixed(2)+'%':'–';
+  $('#stats').innerHTML=`<div><strong>${list.length}</strong><span>Registered</span></div><div><strong style="color:var(--up)">${c('up')}</strong><span>Operational</span></div>
+  <div><strong style="color:var(--warn)">${c('degraded')}</strong><span>Slow</span></div><div><strong style="color:var(--down)">${c('down')}</strong><span>Down</span></div><div><strong>${avg}</strong><span>Average uptime</span></div>`;
+  if(!list.length){$('#list').innerHTML='<div class="empty"><h2>No systems registered yet</h2><p>Register a website, API, or internal system and SENTINEL X starts checking it right away.</p><button class="btn" onclick="openDlg()">Register system</button></div>';return}
+  $('#list').innerHTML=list.map(s=>`<div class="row ${esc(s.state)}">
+    <div><div class="name">${esc(s.name)} <span class="tag">${esc(s.kind)}</span></div><div class="url" title="${esc(s.url)}">${esc(s.url)}</div></div>
+    <div>${ribbon(s.history)}</div>
+    <div class="num">${s.latency_ms!=null?s.latency_ms+' ms':'–'}<small class="st">${LABEL[s.state]||''}${s.error?' · '+esc(s.error):''}</small></div>
+    <div class="num">${s.uptime!=null?s.uptime+'%':'–'}<small>uptime</small></div>
+    <div class="acts"><button class="btn ghost" data-check="${esc(s.id)}">Check now</button><button class="btn ghost danger" data-del="${esc(s.id)}" data-name="${esc(s.name)}">Remove</button></div></div>`).join('');
+}
+const riskLabel=r=>r>=40?'High':r>=20?'Elevated':'Low';
+function renderEvents(list){
+  $('#ev').innerHTML=list.length?list.map(e=>`<tr><td class="mono">${esc(e.occurred_at.replace('T',' ').replace('+00:00',''))}</td><td>${esc(e.event_type)}</td><td>${esc(e.detail)}</td>
+  <td class="risk ${riskLabel(e.risk)}">${riskLabel(e.risk)} (${e.risk})</td><td class="mono">${esc(e.reason_code||'–')}</td>
+  <td class="mono">${esc(e.correlation_id)}<br>${esc(e.event_hash.slice(0,12))}…</td></tr>`).join(''):'<tr><td colspan="6">No events yet. Register a system to create the first one.</td></tr>';
+}
+async function refresh(){
+  try{
+    const [s,e,v]=await Promise.all([api('/systems'),api('/events'),api('/events/verify')]);
+    renderSystems(s);renderEvents(e);
+    $('#chain').className='chain '+(v.valid?'ok':'bad');
+    $('#chain').textContent=v.valid?'Chain intact':'Chain broken at event #'+v.broken_at;
+    $('#clock').textContent='Updated '+new Date().toLocaleTimeString();
+  }catch(err){if(err.message!=='Sign in required')$('#clock').textContent='API unreachable'}
+}
+function start(){$('#gate').hidden=true;refresh();clearInterval(timer);timer=setInterval(refresh,5000)}
+function openDlg(){$('#form').reset();$('#formErr').textContent='';$('#dlg').showModal()}
+
+$('#gateForm').onsubmit=async ev=>{ev.preventDefault();token=$('#tok').value;
+  try{await api('/systems');sessionStorage.setItem('sx_token',token);$('#tok').value='';$('#gateErr').textContent='';start()}
+  catch{$('#gateErr').textContent='That token was not accepted. Copy it again from the API console.'}};
+$('#out').onclick=lock;$('#add').onclick=openDlg;$('#cancel').onclick=()=>$('#dlg').close();
+$('#form').onsubmit=async ev=>{ev.preventDefault();const f=Object.fromEntries(new FormData(ev.target));
+  f.interval_s=+f.interval_s;f.expect_status=f.expect_status?+f.expect_status:null;
+  try{await api('/systems',{method:'POST',body:JSON.stringify(f)});$('#dlg').close();refresh()}catch(e){$('#formErr').textContent=e.message}};
+$('#list').onclick=async ev=>{const b=ev.target.closest('button');if(!b)return;
+  if(b.dataset.check){b.textContent='Checking…';await api('/systems/'+b.dataset.check+'/check',{method:'POST'}).catch(()=>{});refresh()}
+  if(b.dataset.del&&confirm('Remove '+b.dataset.name+'? Its history is deleted; audit events are kept.')){await api('/systems/'+b.dataset.del,{method:'DELETE'});refresh()}};
+document.querySelectorAll('aside [data-view]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('aside [data-view]').forEach(x=>x.removeAttribute('aria-current'));b.setAttribute('aria-current','true');
+  $('#v-systems').hidden=b.dataset.view!=='systems';$('#v-audit').hidden=b.dataset.view!=='audit'});
+if(token)start();
+</script>
+</body>
+</html>

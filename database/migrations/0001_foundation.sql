@@ -1,0 +1,1 @@
+-- Phase 1 (foundation): extensions and schema_migrations bookkeeping.
